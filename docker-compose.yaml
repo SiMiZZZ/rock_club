@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+  app:
+    restart: always
+    build: .
+    command: bash -c "uv run uvicorn server:app --port 8000 --host 0.0.0.0"
+    ports:
+      - "8000:8000"
+    container_name: app
