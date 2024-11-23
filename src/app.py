@@ -11,3 +11,10 @@ app = Application()
 
 docs = OpenAPIHandler(info=Info(title="URFU Rock Club Api", version="0.0.1"))
 docs.bind_app(app)
+
+app.use_cors(
+        allow_methods="*",
+        allow_origins="*",
+        allow_headers="*",
+        max_age=300,
+    )
