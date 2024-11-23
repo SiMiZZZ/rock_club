@@ -19,3 +19,6 @@ dependencies = [
 dev = [
     "pre-commit>=4.0.1",
 ]
+
+[tool.mypy]
+mypy_path = ["./src"]

@@ -1,5 +1,5 @@
-import src.api  # noqa: F401
-import src.api.v1  # noqa: F401
+import api  # noqa: F401
+import api.v1  # noqa: F401
 
 
 from blacksheep import Application
