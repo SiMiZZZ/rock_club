@@ -7,4 +7,3 @@ class User(Table, tablename="user"):
     email = columns.Varchar()
     name = columns.Varchar()
     password = columns.Secret(length=255)
-
