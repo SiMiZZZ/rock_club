@@ -34,7 +34,7 @@ def decode_jwt(
 
 
 def generate_user_token(user: UserAuthInfo) -> str:
-    return encode_jwt(JwtPayload(id=str(user.id), email=user.email))
+    return encode_jwt(JwtPayload(id=str(user.id), email=user.email, role=user.role))
 
 
 def hash_password(password: str) -> bytes:

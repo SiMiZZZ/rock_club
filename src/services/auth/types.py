@@ -18,6 +18,7 @@ class UserAuthInfo(BaseModel):
     email: EmailStr
     name: str
     surname: str
+    role: UserRole
     access_token: str | None = None
 
     model_config = ConfigDict(from_attributes=True)

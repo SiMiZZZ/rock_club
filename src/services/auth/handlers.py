@@ -6,7 +6,7 @@ import api  # noqa: F401
 import api.v1  # noqa: F401
 
 from blacksheep import Request
-from blacksheep.exceptions import BadRequest
+from blacksheep.exceptions import Unauthorized
 from jwt import InvalidTokenError
 
 from .types import authenticated
@@ -22,7 +22,7 @@ class AuthHandler(AuthenticationHandler):
                 payload = decode_jwt(token.decode())
                 print(payload)
             except InvalidTokenError:
-                raise BadRequest("Некорректный токен")
+                raise Unauthorized("Некорректный токен")
             context.identity = UserData(payload, authenticated)
             print(context.identity.claims)
         else:
