@@ -1,7 +1,13 @@
+from enum import StrEnum
 from typing import final
 
 from pydantic import BaseModel, EmailStr, ConfigDict, UUID4
 from dataclasses import dataclass
+
+
+class UserRole(StrEnum):
+    CLIENT = "CLIENT"
+    ADMIN = "ADMIN"
 
 
 class UserAuthInfo(BaseModel):
