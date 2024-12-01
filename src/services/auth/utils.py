@@ -5,21 +5,24 @@ from datetime import datetime, timedelta
 import bcrypt
 import jwt
 from typing import Dict
+from dataclasses import asdict
+
 
 from config import settings
+from services.auth.types import JwtPayload
 
 
 def encode_jwt(
-    payload: dict,
+    payload: JwtPayload,
     private_key: str = settings.PRIVATE_JWT_KEY,
     algorithm: str = settings.JWT_ALGORITHM,
     expire_minutes: int = settings.ACCESS_TOKEN_EXPIRE_MINUTES,
 ) -> str:
-    to_encode = payload.copy()
+    to_encode = asdict(payload)
     now = datetime.now()
     expire = now + timedelta(minutes=int(expire_minutes))
     to_encode.update(exp=expire, iat=now)
-    encoded_jwt = jwt.encode(payload, private_key, algorithm=algorithm)
+    encoded_jwt = jwt.encode(to_encode, private_key, algorithm=algorithm)
     return encoded_jwt
 
 
