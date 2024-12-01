@@ -21,6 +21,11 @@ class RegisterUser(BaseModel):
     password: str
 
 
+class LoginUser(BaseModel):
+    email: EmailStr
+    password: str
+
+
 @final
 @dataclass(frozen=True)
 class JwtPayload:

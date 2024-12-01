@@ -2,8 +2,8 @@ from asyncpg import UniqueViolationError
 from result import Result, Ok, Err
 
 from models import User
-from services.auth.types import UserAuthInfo, RegisterUser, JwtPayload
-from services.auth.utils import hash_password, encode_jwt
+from services.auth.types import UserAuthInfo, RegisterUser, LoginUser
+from services.auth.utils import hash_password, generate_user_token, verify_password
 
 
 async def register_user(user: RegisterUser) -> Result[UserAuthInfo, str]:
@@ -18,7 +18,14 @@ async def register_user(user: RegisterUser) -> Result[UserAuthInfo, str]:
     except UniqueViolationError:
         return Err("Пользователь с таким email уже зарегистрирован")
     new_user = UserAuthInfo.model_validate(orm_user)
-    new_user.access_token = encode_jwt(
-        JwtPayload(id=str(new_user.id), email=user.email)
-    )
+    new_user.access_token = generate_user_token(new_user)
+    return Ok(new_user)
+
+
+async def login_user(user: LoginUser) -> Result[UserAuthInfo, str]:
+    orm_user = await User.objects().where(User.email == user.email).first()
+    if not orm_user or not verify_password(user.password, orm_user.password):
+        return Err("Неверные данные пользователя")
+    new_user = UserAuthInfo.model_validate(orm_user)
+    new_user.access_token = generate_user_token(new_user)
     return Ok(new_user)

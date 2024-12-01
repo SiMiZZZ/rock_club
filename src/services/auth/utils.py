@@ -1,5 +1,3 @@
-import random
-import string
 from datetime import datetime, timedelta
 
 import bcrypt
@@ -9,7 +7,7 @@ from dataclasses import asdict
 
 
 from config import settings
-from services.auth.types import JwtPayload
+from services.auth.types import JwtPayload, UserAuthInfo
 
 
 def encode_jwt(
@@ -35,15 +33,15 @@ def decode_jwt(
     return decoded_jwt
 
 
+def generate_user_token(user: UserAuthInfo) -> str:
+    return encode_jwt(JwtPayload(id=str(user.id), email=user.email))
+
+
 def hash_password(password: str) -> bytes:
     salt = bcrypt.gensalt()
     bytes_password: bytes = password.encode()
     return bcrypt.hashpw(bytes_password, salt)
 
 
-def generate_password():
-    password = ""
-    alphabet = string.ascii_letters + string.digits
-    for a in range(10):
-        password += random.choice(alphabet)
-    return password
+def verify_password(password: str, hashed: str) -> bool:
+    return bcrypt.checkpw(password.encode(), hashed.encode())
