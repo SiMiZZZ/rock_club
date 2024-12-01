@@ -9,6 +9,8 @@ from blacksheep import Application
 from blacksheep.server.openapi.v3 import OpenAPIHandler
 from openapidocs.v3 import Info  # type: ignore
 
+from services.auth.types import authenticated
+
 app = Application()
 
 docs = OpenAPIHandler(info=Info(title="URFU Rock Club Api", version="0.0.1"))
@@ -23,7 +25,6 @@ app.use_cors(
 
 
 app.use_authentication().add(AuthHandler())
-Authenticated = "authenticated"
 
 # enable authorization, and add a policy that requires an authenticated user
-app.use_authorization().add(Policy(Authenticated, AuthenticatedRequirement()))
+app.use_authorization().add(Policy(authenticated, AuthenticatedRequirement()))

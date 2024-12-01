@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     PRIVATE_JWT_KEY: str = "stub"
     PUBLIC_JWT_KEY: str = "stub"
-    JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    JWT_ALGORITHM: str = "RS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60000
 
     DEBUG_SQL: bool = True

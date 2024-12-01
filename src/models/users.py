@@ -11,4 +11,5 @@ class User(Table, tablename="user"):
     name = columns.Varchar()
     surname = columns.Varchar()
     role = columns.Varchar(choices=UserRole, default=UserRole.CLIENT)
+    description = columns.Text(null=True)
     password = columns.Secret(length=255)

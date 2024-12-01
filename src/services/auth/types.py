@@ -5,6 +5,9 @@ from pydantic import BaseModel, EmailStr, ConfigDict, UUID4
 from dataclasses import dataclass
 
 
+authenticated = "authenticated"
+
+
 class UserRole(StrEnum):
     CLIENT = "CLIENT"
     ADMIN = "ADMIN"
@@ -37,3 +40,4 @@ class LoginUser(BaseModel):
 class JwtPayload:
     id: str
     email: EmailStr
+    role: str
