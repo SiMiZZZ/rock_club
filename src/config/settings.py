@@ -12,4 +12,9 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = "stub"
     DB_NAME: str = "stub"
 
+    PRIVATE_JWT_KEY: str = "stub"
+    PUBLIC_JWT_KEY: str = "stub"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
     DEBUG_SQL: bool = True

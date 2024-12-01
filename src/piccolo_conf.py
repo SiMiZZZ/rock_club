@@ -1,9 +1,9 @@
 from piccolo.conf.apps import AppRegistry
 from piccolo.engine import PostgresEngine
 
-from src.config import settings
+from config import settings
 
-APP_REGISTRY = AppRegistry(apps=["src.config.piccolo_app"])
+APP_REGISTRY = AppRegistry(apps=["config.piccolo_app"])
 DB = PostgresEngine(
     config={
         "host": settings.DB_HOST,
