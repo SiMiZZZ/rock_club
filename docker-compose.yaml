@@ -4,6 +4,8 @@ services:
   app:
     restart: always
     build: .
+    env_file:
+      - /media/rock_club/.env
     command: bash -c "uv run uvicorn app:app --port 8000 --host 0.0.0.0"
     ports:
       - "8000:8000"
