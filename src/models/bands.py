@@ -1,4 +1,5 @@
-from piccolo.columns import ForeignKey
+from piccolo.columns import ForeignKey, LazyTableReference
+from piccolo.columns.m2m import M2M
 from piccolo.table import Table
 from piccolo import columns
 from .users import User
@@ -10,6 +11,7 @@ class Band(Table, tablename="band"):
     leader = ForeignKey(User, related_name="leader_bands")
     name = columns.Varchar()
     description = columns.Text(null=True)
+    members = M2M(LazyTableReference("user_bands", module_path=__name__))
 
 
 class UserBands(Table, tablename="user_band"):
