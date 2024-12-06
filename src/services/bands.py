@@ -83,3 +83,7 @@ async def band_info(band_id: UUID4) -> Result[BandInfo, str]:
     if band is None:
         return Err("Группы с таким id не существует")
     return Ok(await BandInfo.from_band(band))
+
+
+async def add_members_to_band(band: Band, members: List[User]):
+    await band.add_m2m(*members, m2m=Band.members)
