@@ -1,6 +1,7 @@
 from typing import Optional, List, Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, UUID4
+from result import Result, Err, Ok
 
 from models import User, Band, UserBands
 from services.users import UserInfo
@@ -66,8 +67,15 @@ async def create_band(leader_id: str, band_info: BandCreate) -> BandShortInfo:
     return await BandShortInfo.from_band(new_band_with_leader)
 
 
-async def get_user_groups(user_id: str) -> List[BandShortInfo]:
+async def get_user_bands(user_id: str) -> List[BandShortInfo]:
     user_bands = await UserBands.objects(UserBands.band.leader).where(
         UserBands.user == user_id
     )
     return [await BandShortInfo.from_band(user_band.band) for user_band in user_bands]
+
+
+async def band_info(band_id: UUID4) -> Result[BandInfo, str]:
+    band = await Band.objects(Band.leader).where(Band.id == band_id).first()
+    if band is None:
+        return Err("Группы с таким id не существует")
+    return Ok(await BandInfo.from_band(band))
