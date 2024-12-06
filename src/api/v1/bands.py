@@ -40,5 +40,8 @@ async def get_my_groups(
 
 @get("/api/v1/bands/<band_id>")
 async def get_band_info(band_id: UUID4) -> BandInfo:
+    """
+    Получение информации о группе
+    """
     band = await band_info(band_id)
     return band.unwrap_or_raise(BandDoesNotExistException)
