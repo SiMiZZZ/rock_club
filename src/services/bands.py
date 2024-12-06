@@ -13,6 +13,7 @@ class BandCreate(BaseModel):
 
 
 class BandInfo(BaseModel):
+    id: UUID4
     name: str
     description: Optional[str]
     leader: UserInfo
@@ -23,6 +24,7 @@ class BandInfo(BaseModel):
     @classmethod
     async def from_band(cls, band: Band) -> Self:
         return cls(
+            id=band.id,
             name=band.name,
             description=band.description,
             leader=UserInfo.from_user(band.leader),
@@ -34,6 +36,7 @@ class BandInfo(BaseModel):
 
 
 class BandShortInfo(BaseModel):
+    id: UUID4
     name: str
     description: Optional[str]
     leader: UserInfo
@@ -43,6 +46,7 @@ class BandShortInfo(BaseModel):
     @classmethod
     async def from_band(cls, band: Band) -> Self:
         return cls(
+            id=band.id,
             name=band.name,
             description=band.description,
             leader=UserInfo.from_user(band.leader),
