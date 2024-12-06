@@ -12,6 +12,9 @@ from services.bands import create_band, BandCreate, get_user_groups, BandShortIn
 @auth(authenticated)
 @post("/api/v1/bands")
 async def create_new_band(user: Optional[Identity], band: BandCreate) -> BandShortInfo:
+    """
+    Создание новой группы
+    """
     return await create_band(user.get("id"), band)
 
 
@@ -20,4 +23,7 @@ async def create_new_band(user: Optional[Identity], band: BandCreate) -> BandSho
 async def get_my_groups(
     user: Optional[Identity],
 ) -> List[BandShortInfo]:
+    """
+    Получение списка групп авторизованного пользователя
+    """
     return await get_user_groups(user.get("id"))
