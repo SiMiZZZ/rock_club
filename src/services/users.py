@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Self
 
 from pydantic import BaseModel, UUID4, ConfigDict, Field
 
@@ -13,6 +13,16 @@ class UserInfo(BaseModel):
     description: str
 
     model_config = ConfigDict(from_attributes=True)
+
+    @classmethod
+    def from_user(cls, user: User) -> Self:
+        return cls(
+            id=user.id,
+            name=user.name,
+            surname=user.surname,
+            email=user.email,
+            description=user.description,
+        )
 
 
 class UserUpdateInfo(BaseModel):

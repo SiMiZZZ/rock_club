@@ -15,4 +15,4 @@ class User(Table, tablename="user"):
     role = columns.Varchar(choices=UserRole, default=UserRole.CLIENT)
     description = columns.Text(null=True)
     password = columns.Secret(length=255)
-    bands = M2M(LazyTableReference("UserBands", module_path=__name__))
+    bands = M2M(LazyTableReference("UserBands", module_path="models.bands"))
