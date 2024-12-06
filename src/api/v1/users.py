@@ -12,6 +12,9 @@ from services.users import get_user_info, UserInfo, UserUpdateInfo, update_user_
 @auth(authenticated)
 @get("/api/v1/users/me")
 async def user_info(user: Optional[Identity]) -> UserInfo:
+    """
+    Получение информации об авторизованном пользователе
+    """
     return await get_user_info(user.get("id"))
 
 
@@ -20,5 +23,8 @@ async def user_info(user: Optional[Identity]) -> UserInfo:
 async def update_self_user(
     user: Optional[Identity], update_info: UserUpdateInfo
 ) -> UserInfo:
+    """
+    Обновление информации об авторизованном пользователе
+    """
     await update_user_info(user.get("id"), update_info)
     return await get_user_info(user.get("id"))
