@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import final
+from typing import final, Optional
 
 from pydantic import BaseModel, EmailStr, ConfigDict, UUID4
 from dataclasses import dataclass
@@ -18,7 +18,7 @@ class UserAuthInfo(BaseModel):
     email: EmailStr
     name: str
     surname: str
-    main_image: str
+    main_image: Optional[str]
     role: UserRole
     access_token: str | None = None
 
