@@ -1,12 +1,12 @@
 from typing import Optional, List
 
-from blacksheep import post, get
+from blacksheep import post, get, FromFiles
 from blacksheep.exceptions import Forbidden
 from guardpost import Identity
 from pydantic import UUID4, BaseModel
 
-from api.exceptions import BandDoesNotExistException
-from models import Band, User
+from api.exceptions import BandDoesNotExistException, NoFileData
+from models import User
 from services.auth.types import authenticated
 from blacksheep.server.authorization import auth
 
@@ -18,7 +18,10 @@ from services.bands import (
     band_info,
     BandInfo,
     add_members_to_band,
+    get_band_or_none,
 )
+from services.s3.client import S3Client, FileType
+from services.s3.types import File
 from services.types import EmptyObj
 
 
@@ -63,11 +66,33 @@ async def add_band_members(
     """
     Добавление участников в группу
     """
-    band = await Band.objects().where(Band.id == band_id).first()
-    if not band:
+    band = await get_band_or_none(band_id)
+    if band is None:
         raise BandDoesNotExistException
     if user.get("id") != str(band.leader):
         raise Forbidden()
     members = await User.objects().where(User.id.is_in(members_ids.members_ids))
     await add_members_to_band(band, members)
     return EmptyObj()
+
+
+@auth(authenticated)
+@post("/api/v1/bands/<band_id>/images/main")
+async def add_band_main_image(
+    files: FromFiles, band_id: UUID4, user_data: Optional[Identity]
+) -> str:
+    band = await get_band_or_none(band_id)
+    if band is None:
+        raise BandDoesNotExistException
+    if user_data.get("id") != str(band.leader):
+        raise Forbidden()
+    try:
+        main_image = File.from_form_part(files.value[0])
+    except IndexError:
+        raise NoFileData()
+
+    client = S3Client()
+    file_link = client.upload_file(FileType.IMAGE, main_image)
+    band.main_image = file_link
+    await band.save()
+    return file_link

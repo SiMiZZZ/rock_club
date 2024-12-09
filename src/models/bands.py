@@ -11,6 +11,7 @@ class Band(Table, tablename="band"):
     leader = ForeignKey(User, related_name="leader_bands")
     name = columns.Varchar()
     description = columns.Text(null=True)
+    main_image = columns.Varchar(null=True)
     members = M2M(LazyTableReference("UserBands", module_path=__name__))
 
 

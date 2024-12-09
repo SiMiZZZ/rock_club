@@ -17,6 +17,7 @@ class BandInfo(BaseModel):
     name: str
     description: Optional[str]
     leader: UserInfo
+    main_image: Optional[str]
     members: List[UserInfo]
 
     model_config = ConfigDict(from_attributes=True)
@@ -28,6 +29,7 @@ class BandInfo(BaseModel):
             name=band.name,
             description=band.description,
             leader=UserInfo.from_user(band.leader),
+            main_image=band.main_image,
             members=[
                 UserInfo.model_validate(member)
                 for member in await band.get_m2m(Band.members)
@@ -39,6 +41,7 @@ class BandShortInfo(BaseModel):
     id: UUID4
     name: str
     description: Optional[str]
+    main_image: Optional[str]
     leader: UserInfo
 
     model_config = ConfigDict(from_attributes=True)
@@ -50,7 +53,12 @@ class BandShortInfo(BaseModel):
             name=band.name,
             description=band.description,
             leader=UserInfo.from_user(band.leader),
+            main_image=band.main_image,
         )
+
+
+async def get_band_or_none(band_id: str) -> Optional[Band]:
+    return await Band.objects().where(Band.id == band_id).first()
 
 
 async def create_band(leader_id: str, band_info: BandCreate) -> BandShortInfo:
