@@ -3,6 +3,7 @@ from typing import Optional, List
 from blacksheep import get, patch, post
 from blacksheep import FromFiles
 from guardpost import Identity
+from pydantic import HttpUrl
 
 from api.exceptions import NoFileData
 from services.auth.types import authenticated
@@ -48,7 +49,7 @@ async def find_users(substring: str) -> List[UserInfo]:
 
 @auth(authenticated)
 @post("/api/v1/users/me/images/main")
-async def add_main_image(files: FromFiles, user_data: Optional[Identity]) -> str:
+async def add_main_image(files: FromFiles, user_data: Optional[Identity]) -> HttpUrl:
     try:
         main_image = File.from_form_part(files.value[0])
     except IndexError:

@@ -1,9 +1,9 @@
 from typing import Optional, List
 
-from blacksheep import post, get, FromFiles
+from blacksheep import post, get, FromFiles, patch
 from blacksheep.exceptions import Forbidden
 from guardpost import Identity
-from pydantic import UUID4, BaseModel
+from pydantic import UUID4, BaseModel, HttpUrl
 
 from api.exceptions import BandDoesNotExistException, NoFileData
 from models import User
@@ -19,6 +19,8 @@ from services.bands import (
     BandInfo,
     add_members_to_band,
     get_band_or_none,
+    BandUpdateInfo,
+    update_band,
 )
 from services.s3.client import S3Client, FileType
 from services.s3.types import File
@@ -59,6 +61,20 @@ async def get_band_info(band_id: UUID4) -> BandInfo:
 
 
 @auth(authenticated)
+@patch("/api/v1/bands/<band_id>")
+async def update_band_info(
+    band_id: UUID4, user_data: Optional[Identity], update_data: BandUpdateInfo
+) -> BandInfo:
+    band = await get_band_or_none(band_id)
+    if band is None:
+        raise BandDoesNotExistException
+    if user_data.get("id") != str(band.leader):
+        raise Forbidden()
+    await update_band(band, update_data)
+    return (await band_info(band.id)).ok()
+
+
+@auth(authenticated)
 @post("/api/v1/bands/<band_id>/members")
 async def add_band_members(
     band_id: UUID4, members_ids: _BandMembers, user: Optional[Identity]
@@ -80,7 +96,7 @@ async def add_band_members(
 @post("/api/v1/bands/<band_id>/images/main")
 async def add_band_main_image(
     files: FromFiles, band_id: UUID4, user_data: Optional[Identity]
-) -> str:
+) -> HttpUrl:
     band = await get_band_or_none(band_id)
     if band is None:
         raise BandDoesNotExistException

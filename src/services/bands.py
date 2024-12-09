@@ -12,6 +12,11 @@ class BandCreate(BaseModel):
     description: Optional[str]
 
 
+class BandUpdateInfo(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+
+
 class BandInfo(BaseModel):
     id: UUID4
     name: str
@@ -77,6 +82,10 @@ async def create_band(leader_id: str, band_info: BandCreate) -> BandShortInfo:
     await new_band.add_m2m(leader, m2m=Band.members)
     new_band_with_leader.leader = leader
     return await BandShortInfo.from_band(new_band_with_leader)
+
+
+async def update_band(band: Band, info: BandUpdateInfo) -> None:
+    await Band.update(info.model_dump(exclude_none=True)).where(Band.id == band.id)
 
 
 async def get_user_bands(user_id: str) -> List[BandShortInfo]:
