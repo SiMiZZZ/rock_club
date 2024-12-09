@@ -14,5 +14,6 @@ class User(Table, tablename="user"):
     surname = columns.Varchar()
     role = columns.Varchar(choices=UserRole, default=UserRole.CLIENT)
     description = columns.Text(null=True)
+    main_image = columns.Varchar(null=True)
     password = columns.Secret(length=255)
     bands = M2M(LazyTableReference("UserBands", module_path="models.bands"))

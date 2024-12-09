@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "bcrypt>=4.2.1",
     "blacksheep>=2.0.7",
+    "boto3>=1.35.76",
     "cryptography>=44.0.0",
     "mypy-baseline>=0.7.2",
     "mypy>=1.13.0",

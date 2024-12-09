@@ -14,3 +14,8 @@ class InvalidAuthDataException(HTTPException):
 class BandDoesNotExistException(HTTPException):
     def __init__(self, message: str = "Группы с таким id не существует"):
         super().__init__(404, message)
+
+
+class NoFileData(HTTPException):
+    def __init__(self, message: str = "Файлы не переданы"):
+        super().__init__(400, message)

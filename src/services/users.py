@@ -11,6 +11,7 @@ class UserInfo(BaseModel):
     surname: str
     email: str
     description: str
+    main_image: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -22,6 +23,7 @@ class UserInfo(BaseModel):
             surname=user.surname,
             email=user.email,
             description=user.description,
+            main_image=user.main_image,
         )
 
 
@@ -29,6 +31,10 @@ class UserUpdateInfo(BaseModel):
     name: Optional[str] = Field(default=None)
     surname: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
+
+
+async def get_user_or_none(user_id: str) -> Optional[User]:
+    return await User.objects().where(User.id == user_id).first()
 
 
 async def get_user_info(user_id: str) -> UserInfo:

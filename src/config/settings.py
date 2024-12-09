@@ -17,4 +17,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "RS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60000
 
+    S3_ACCESS_TOKEN: str = "stub"
+    S3_SECRET_KEY: str = "stub"
+    S3_BUCKET_NAME: str = "stub"
+    S3_DEFAULT_LINK: str = "stub"
+    S3_ENDPOINT: str = "stub"
+
     DEBUG_SQL: bool = True
