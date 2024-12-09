@@ -18,6 +18,7 @@ class UserAuthInfo(BaseModel):
     email: EmailStr
     name: str
     surname: str
+    main_image: str
     role: UserRole
     access_token: str | None = None
 
