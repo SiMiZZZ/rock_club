@@ -16,15 +16,12 @@ from .utils import decode_jwt
 class AuthHandler(AuthenticationHandler):
     async def authenticate(self, context: Request) -> Optional[Identity]:
         token = context.get_first_header(b"Authorization")
-        print(token)
         if token:
             try:
                 payload = decode_jwt(token.decode())
-                print(payload)
             except InvalidTokenError:
                 raise Unauthorized("Некорректный токен")
             context.identity = UserData(payload, authenticated)
-            print(context.identity.claims)
         else:
             context.identity = None
         return context.identity

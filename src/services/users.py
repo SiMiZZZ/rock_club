@@ -37,8 +37,12 @@ async def get_user_or_none(user_id: str) -> Optional[User]:
     return await User.objects().where(User.id == user_id).first()
 
 
-async def get_user_info(user_id: str) -> UserInfo:
+async def get_user_info_by_id(user_id: str) -> UserInfo:
     user = await User.objects().where(User.id == user_id).first()
+    return UserInfo.model_validate(user)
+
+
+async def get_user_info(user: User) -> UserInfo:
     return UserInfo.model_validate(user)
 
 

@@ -11,6 +11,11 @@ class InvalidAuthDataException(HTTPException):
         super().__init__(400, message)
 
 
+class InvalidUserDataException(HTTPException):
+    def __init__(self, message: str = "Пользователя с таким id не существует"):
+        super().__init__(400, message)
+
+
 class BandDoesNotExistException(HTTPException):
     def __init__(self, message: str = "Группы с таким id не существует"):
         super().__init__(404, message)
