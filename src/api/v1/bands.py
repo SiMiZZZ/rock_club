@@ -51,6 +51,16 @@ async def get_my_groups(
     return await get_user_bands(user.get("id"))
 
 
+@get("/api/v1/users/<user_id>/bands")
+async def get_user_groups(
+    user_id: UUID4,
+) -> List[BandShortInfo]:
+    """
+    Получение списка групп авторизованного пользователя
+    """
+    return await get_user_bands(user_id)
+
+
 @get("/api/v1/bands/<band_id>")
 async def get_band_info(band_id: UUID4) -> BandInfo:
     """
