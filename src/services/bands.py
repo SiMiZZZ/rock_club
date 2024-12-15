@@ -1,10 +1,10 @@
-from typing import Optional, List, Self
+from typing import Optional, List
 
-from pydantic import BaseModel, ConfigDict, UUID4
+from pydantic import BaseModel, UUID4
 from result import Result, Err, Ok
 
 from models import User, Band, UserBands
-from services.users import UserInfo
+from services.types import BandInfo, BandShortInfo
 
 
 class BandCreate(BaseModel):
@@ -15,51 +15,6 @@ class BandCreate(BaseModel):
 class BandUpdateInfo(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
-
-
-class BandInfo(BaseModel):
-    id: UUID4
-    name: str
-    description: Optional[str]
-    leader: UserInfo
-    main_image: Optional[str]
-    members: List[UserInfo]
-
-    model_config = ConfigDict(from_attributes=True)
-
-    @classmethod
-    async def from_band(cls, band: Band) -> Self:
-        return cls(
-            id=band.id,
-            name=band.name,
-            description=band.description,
-            leader=UserInfo.from_user(band.leader),
-            main_image=band.main_image,
-            members=[
-                UserInfo.model_validate(member)
-                for member in await band.get_m2m(Band.members)
-            ],
-        )
-
-
-class BandShortInfo(BaseModel):
-    id: UUID4
-    name: str
-    description: Optional[str]
-    main_image: Optional[str]
-    leader: UserInfo
-
-    model_config = ConfigDict(from_attributes=True)
-
-    @classmethod
-    async def from_band(cls, band: Band) -> Self:
-        return cls(
-            id=band.id,
-            name=band.name,
-            description=band.description,
-            leader=UserInfo.from_user(band.leader),
-            main_image=band.main_image,
-        )
 
 
 async def get_band_or_none(band_id: str) -> Optional[Band]:

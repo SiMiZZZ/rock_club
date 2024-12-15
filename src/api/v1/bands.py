@@ -14,9 +14,7 @@ from services.bands import (
     create_band,
     BandCreate,
     get_user_bands,
-    BandShortInfo,
     band_info,
-    BandInfo,
     add_members_to_band,
     get_band_or_none,
     BandUpdateInfo,
@@ -24,7 +22,7 @@ from services.bands import (
 )
 from services.s3.client import S3Client, FileType
 from services.s3.types import File
-from services.types import EmptyObj
+from services.types import EmptyObj, BandInfo, BandShortInfo
 
 
 class _BandMembers(BaseModel):

@@ -1,30 +1,9 @@
-from typing import Optional, Self, List
+from typing import Optional, List
 
 from piccolo.query.functions.string import Concat
-from pydantic import BaseModel, UUID4, ConfigDict, Field
+from pydantic import BaseModel, Field
 from models import User
-
-
-class UserInfo(BaseModel):
-    id: UUID4
-    name: str
-    surname: str
-    email: str
-    description: str
-    main_image: Optional[str]
-
-    model_config = ConfigDict(from_attributes=True)
-
-    @classmethod
-    def from_user(cls, user: User) -> Self:
-        return cls(
-            id=user.id,
-            name=user.name,
-            surname=user.surname,
-            email=user.email,
-            description=user.description,
-            main_image=user.main_image,
-        )
+from services.types import UserInfo
 
 
 class UserUpdateInfo(BaseModel):

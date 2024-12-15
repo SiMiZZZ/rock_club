@@ -13,13 +13,13 @@ from services.s3.client import S3Client, FileType
 from services.s3.types import File
 from services.users import (
     get_user_info_by_id,
-    UserInfo,
     UserUpdateInfo,
     update_user_info,
     find_users_by_substring,
     get_user_or_none,
     get_user_info,
 )
+from services.types import UserInfo
 
 
 @auth(authenticated)
