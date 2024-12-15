@@ -24,3 +24,8 @@ class BandDoesNotExistException(HTTPException):
 class NoFileData(HTTPException):
     def __init__(self, message: str = "Файлы не переданы"):
         super().__init__(400, message)
+
+
+class NotValidDateIntervalException(HTTPException):
+    def __init__(self, message: str = "Введены некорректные параметры дат"):
+        super().__init__(400, message)
