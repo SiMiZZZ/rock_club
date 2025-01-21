@@ -127,7 +127,7 @@ class RehearsalInfo(BaseModel):
             time_from=rehearsal.time_from,
             time_to=rehearsal.time_to,
             is_individual=rehearsal.is_individual,
-            individual_user=UserInfo.from_user(await rehearsal.individual_user)
+            individual_user=UserInfo.from_user(rehearsal.individual_user)
             if rehearsal.is_individual
             else None,
         )

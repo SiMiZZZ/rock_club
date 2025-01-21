@@ -8,6 +8,8 @@ from models import Rehearsal
 from services.types import DateRange, RehearsalInfo, TimeRange
 from piccolo.columns.combination import And, Or
 
+from services.users import get_user_or_none
+
 
 class RehearsalCreate(BaseModel):
     band_id: Optional[UUID4]
@@ -19,11 +21,15 @@ class RehearsalCreate(BaseModel):
 
 
 async def get_rehearsal_by_id(rehearsal_id: UUID4) -> Rehearsal:
-    return await (
-        Rehearsal.objects(
-            Rehearsal.band.all_related(), Rehearsal.individual_user.all_related()
-        ).where(Rehearsal.id == rehearsal_id)
+    rehearsal = await (
+        Rehearsal.objects(Rehearsal.band.all_related()).where(
+            Rehearsal.id == rehearsal_id
+        )
     ).first()
+    # FIXME: Некорректно работает префетч на юзера, нужно подробнее разобраться
+    if rehearsal.is_individual:
+        rehearsal.individual_user = await get_user_or_none(rehearsal.individual_user)
+    return rehearsal
 
 
 async def get_schedule_by_daterange(date_range: DateRange) -> List[RehearsalInfo]:
@@ -35,6 +41,12 @@ async def get_schedule_by_daterange(date_range: DateRange) -> List[RehearsalInfo
         .where(Rehearsal.date <= date_range.end)
         .order_by(Rehearsal.date)
     )
+    for rehearsal in rehearsals:
+        # FIXME: Некорректно работает префетч на юзера, нужно подробнее разобраться
+        if rehearsal.is_individual:
+            rehearsal.individual_user = await get_user_or_none(
+                rehearsal.individual_user
+            )
     return [await RehearsalInfo.from_rehearsal(rehearsal) for rehearsal in rehearsals]
 
 
