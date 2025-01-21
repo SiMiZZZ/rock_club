@@ -91,6 +91,20 @@ class DateRange:
         return Ok(DateRange(start, end))
 
 
+@dataclasses.dataclass(frozen=True, slots=True)
+class TimeRange:
+    time_from: datetime.time
+    time_to: datetime.time
+
+    @classmethod
+    def try_from(
+        cls, time_from: datetime.time, time_to: datetime.time
+    ) -> Result[Self, None]:
+        if time_from > time_to:
+            return Err(None)
+        return Ok(TimeRange(time_from, time_to))
+
+
 class RehearsalInfo(BaseModel):
     id: UUID4
     band: Optional[BandShortInfo]

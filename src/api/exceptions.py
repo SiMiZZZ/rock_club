@@ -29,3 +29,8 @@ class NoFileData(HTTPException):
 class NotValidDateIntervalException(HTTPException):
     def __init__(self, message: str = "Введены некорректные параметры дат"):
         super().__init__(400, message)
+
+
+class ReservedTimeRangeException(HTTPException):
+    def __init__(self, message: str = "Данное время уже забронировано"):
+        super().__init__(400, message)
