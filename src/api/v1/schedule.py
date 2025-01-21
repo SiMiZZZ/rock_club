@@ -22,6 +22,9 @@ from services.types import DateRange, RehearsalInfo
 async def get_schedule(
     date_from: FromQuery[datetime.date], date_to: FromQuery[datetime.date]
 ):
+    """
+    Получить расписание репетиций по диапазону дат
+    """
     date_range = DateRange.try_from(date_from.value, date_to.value).unwrap_or_raise(
         NotValidDateIntervalException
     )
@@ -32,6 +35,9 @@ async def get_schedule(
 
 @post("/api/v1/schedule/rehearsal")
 async def create_new_rehearsal(rehearsal: RehearsalCreate) -> RehearsalInfo:
+    """
+    Создать новую репетицию
+    """
     if not rehearsal.is_individual:
         band = await get_band_or_none(rehearsal.band_id)
         if band is None:
