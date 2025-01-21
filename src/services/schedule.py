@@ -85,12 +85,12 @@ async def timerange_is_reserved(date: datetime.date, time_range: TimeRange) -> b
             Or(
                 Or(
                     And(
-                        Rehearsal.time_from >= time_range.time_from,
+                        Rehearsal.time_from > time_range.time_from,
                         Rehearsal.time_from <= time_range.time_to,
                     ),
                     And(
                         Rehearsal.time_to >= time_range.time_from,
-                        Rehearsal.time_to <= time_range.time_to,
+                        Rehearsal.time_to < time_range.time_to,
                     ),
                 ),
                 And(
